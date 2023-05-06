@@ -85,6 +85,7 @@ The main goal is to provide easy access and navigation throw database and add ho
 - [Search by Document Name](#search-by-document-name)
 - [Search by Author](#search-by-author)
 - [Combine Databases](#combine-databases)
+- [Autofilling](#autofilling)
 
 ### Add a List of Documents
 - User should be able to add a batch of documents instead of doing it one by one for greater convenience
@@ -136,6 +137,11 @@ The main goal is to provide easy access and navigation throw database and add ho
 - Input: local path to the new database
 - Output: modified database
 
+### Autofilling
+- Fields title, doi and authors should be able to be filled automatically from local file or from given doi. 
+- Input: local file path or doi
+- Output: None or doc title, doi, authors
+ 
 ## Feature Priorization
 
 ### Highest priority:
@@ -153,9 +159,7 @@ The main goal is to provide easy access and navigation throw database and add ho
 5. [Combine Databases](#combine-databases)
 6. [Search by Document Name](#search-by-document-name)
 ### Low priority
-1. [Add a List of Documents to the Database](#add-a-list-of-documents)
-2. [Search by Author](#search-by-author)
-3. [Edit Keyword](#edit-keyword)
-
-
-## Feature requirements 
+1. [Autofilling](#autofilling)
+2. [Add a List of Documents to the Database](#add-a-list-of-documents)
+3. [Search by Author](#search-by-author)
+4. [Edit Keyword](#edit-keyword)
