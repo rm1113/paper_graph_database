@@ -56,7 +56,7 @@ class DocumentNode:
 
     @property
     def doi(self):
-        return self._date
+        return self._doi
 
     @property
     def local_file_path(self):
@@ -80,8 +80,8 @@ class DocumentNode:
     def __str__(self):
         line = f"Title: {self.title}\n"
         line += f"Author: {self.author}\n"
-        line += f"Date: {self.date}"
-        line += f"doi: {self.doi}\n"
+        line += f"Date: {self.date}\n"
+        line += f"DOI: {self.doi}\n"
         line += f"local path: {self.local_file_path}"
         return line
 
