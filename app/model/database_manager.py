@@ -119,7 +119,7 @@ class DatabaseManager:
         with open(filepath, 'wb') as f:
             pickle.dump(result, f)
         return filepath
-    
+
     def load_schema(self, filepath):
         with open(filepath, 'rb') as f:
             model = pickle.load(f)
@@ -145,7 +145,7 @@ class DatabaseManager:
         raise NotImplementedError
 
     def __str__(self):
-        if len(self.database) == 0:
+        if len(self._database) and len(self._documents) and len(self._keywords) == 0:
             return "Empty database"
 
         result = "Keywords: "
