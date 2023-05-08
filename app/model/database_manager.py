@@ -1,5 +1,7 @@
 from document_node import DocumentNode
 from keyword_node import KeywordNode
+import pickle
+from pathlib import Path
 
 
 class DatabaseManager:
@@ -9,9 +11,9 @@ class DatabaseManager:
         else:
             self._dataset_title = dataset_title
         self._database = []  # adjacency list
-        self._keywords = {}
-        self._documents = {}
-        self._max_id = -1  # first for keywords second for
+        self._keywords = {}   # dict keyword_id: KeywordNode
+        self._documents = {}  # dict document_id: DocumentNode
+        self._max_id = -1  # current maximal id
 
     @property
     def database(self):
@@ -105,11 +107,36 @@ class DatabaseManager:
         result = [self._documents[doc_id] for doc_id in self._database[key_id] if doc_id in self._documents]
         return result
 
-    def save_schema(self):
-        raise NotImplementedError
+    def save_schema(self, filepath: Path = None) -> Path:
 
-    def load_schema(self):
-        raise NotImplementedError
+        result = {
+            'adj_list': self._database,
+            'documents': {i: d.serialize() for i, d in self._documents.items()},
+            'keywords': {i: k.serialize() for i, k in self._keywords.items()}
+        }
+        if filepath is None:
+            filepath = self._dataset_title
+        with open(filepath, 'wb') as f:
+            pickle.dump(result, f)
+        return filepath
+    
+    def load_schema(self, filepath):
+        with open(filepath, 'rb') as f:
+            model = pickle.load(f)
+
+        # Clean current database
+        self._database = []
+        self._keywords = {}
+        self._database = {}
+
+        self._database = model['adj_list']
+        for i, keyword_info in model['keywords'].items():
+            self._keywords[i] = KeywordNode(keyword_info['name'], keyword_info['description'])
+
+        for i, doc_info in model['documents'].items():
+            self.documents[i] = DocumentNode(title=doc_info['title'], author=doc_info['author'],
+                                             doi=doc_info['doi'], date=doc_info['date'],
+                                             local_file_path=doc_info['local_path'])
 
     def save_database(self):
         raise NotImplementedError
@@ -152,4 +179,9 @@ if __name__ == "__main__":
     db.disconnect_document_and_keyword(0, 1)
     db.disconnect_document_and_keyword(0, 1)
     db.connect_document_and_keyword(2, 0)
+    print(db)
+    file = 'temp'
+    db.save_schema(file)
+    print(db)
+    db.load_schema(file)
     print(db)
