@@ -85,6 +85,16 @@ class DocumentNode:
         line += f"local path: {self.local_file_path}"
         return line
 
+    def serialize(self):
+        data = {
+            'title': self.title,
+            'author': self.author,
+            'date': self.date,
+            'doi': self.doi,
+            'local_path': self.local_file_path
+        }
+        return data
+
 
 if __name__ == "__main__":
     doi = '10.1140/epja/s10050-022-00761-3'
