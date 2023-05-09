@@ -16,6 +16,7 @@ from PyQt6.QtCore import Qt
 
 from app.view.welcome_window import WelcomeWindow
 from app.view.filter_bar import FilterBar
+from app.view.keyword_explorer import KeywordExplorer
 
 
 class MainWindow(QMainWindow):
@@ -63,26 +64,19 @@ class MainWindow(QMainWindow):
 
         # Filter bar
         self.filter_bar = FilterBar()
-        # self.filter_bar = QHBoxLayout()
-        # self.filter_bar_w = FilterBar()
-        # self.filter_bar.addWidget(self.filter_bar_w)
-        # self.filter_label = QLabel("Filter:")
-        # self.filter_input = QLineEdit()
-        # self.filter_bar.addWidget(self.filter_label)
-        # self.filter_bar.addWidget(self.filter_input)
 
         # Layout with three columns
-        self.keywords_list = QListWidget()
+        self.keywords_list = KeywordExplorer([f'key{i}' for i in range(25)])
         self.document_explorer = QListWidget()
         self.document_info = QTextEdit()
 
         # Main layout
         self.main_layout = QVBoxLayout()
-        # self.main_layout.addLayout(self.filter_bar)
         self.main_layout.addWidget(self.filter_bar)
         self.columns_layout = QHBoxLayout()
         self.columns_layout.addWidget(self.keywords_list)
         self.columns_layout.addWidget(self.document_explorer)
+        self.columns_layout.setStretchFactor(self.document_explorer, 1)
         self.columns_layout.addWidget(self.document_info)
         self.main_layout.addLayout(self.columns_layout)
 

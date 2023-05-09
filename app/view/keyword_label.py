@@ -5,6 +5,7 @@ class KeywordLabel(QLabel):
     def __init__(self, name, color="#5dade2"):
         super().__init__()
 
+        self.setMaximumSize(200, 30)
         self.setText(name)
         self.color = color
         self.update_style()
