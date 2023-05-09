@@ -29,6 +29,11 @@ class KeywordNode:
         }
         return data
 
+    def __eq__(self, other):
+        if not isinstance(other, KeywordNode):
+            raise TypeError(f"Can't compare <KeywordNode> and {type(other)}")
+        return self.name == other.name and self.description == other.description
+
 
 if __name__ == '__main__':
     k = KeywordNode('key')

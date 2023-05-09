@@ -1,5 +1,5 @@
-from document_node import DocumentNode
-from keyword_node import KeywordNode
+from app.model.document_node import DocumentNode
+from app.model.keyword_node import KeywordNode
 import pickle
 from pathlib import Path
 

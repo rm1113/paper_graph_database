@@ -8,7 +8,7 @@ class DocumentNode:
 
     @classmethod
     def from_doi(cls, doi: str):
-        # TODO: implement check if doi is url and extract real doi
+        # TODO: remove to controller stage
         url = cls.cross_ref_url + f"/{doi}"
         res = requests.get(url)
         if res.status_code == 200:
@@ -23,7 +23,7 @@ class DocumentNode:
             return None
 
     def __init__(self,
-                 title: str = None,
+                 title: str,
                  author: str = None,
                  date: str = None,
                  doi: str = None,
@@ -75,7 +75,7 @@ class DocumentNode:
         self._date = new_date
 
     def change_local_path(self, new_path):
-        self._local_file_path = new_path
+        self._local_file_path = Path(new_path)
 
     def __str__(self):
         line = f"Title: {self.title}\n"
@@ -91,9 +91,18 @@ class DocumentNode:
             'author': self.author,
             'date': self.date,
             'doi': self.doi,
-            'local_path': self.local_file_path
+            'local_path': str(self.local_file_path)
         }
         return data
+
+    def __eq__(self, other):
+        if not isinstance(other, DocumentNode):
+            raise TypeError(f"Can't compare <DocumentNode> and {type(other)}")
+        other_ser = other.serialize()
+        for key, value in self.serialize().items():
+            if value != other_ser[key]:
+                return False
+        return True
 
 
 if __name__ == "__main__":
