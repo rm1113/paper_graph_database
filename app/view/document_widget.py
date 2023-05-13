@@ -1,47 +1,31 @@
-from PyQt6.QtWidgets import QWidget, QLabel, QVBoxLayout, QApplication, QHBoxLayout
-from PyQt6.QtGui import QPixmap, QMouseEvent, QIcon
-from PyQt6.QtCore import Qt, pyqtSignal
+from PyQt6.QtWidgets import QWidget, QLabel, QVBoxLayout, QHBoxLayout, QSizePolicy
+from PyQt6.QtGui import QPixmap, QIcon
+from PyQt6.QtCore import Qt
 
 
 class DocumentWidget(QWidget):
-    clicked = pyqtSignal()
-    doubleClicked = pyqtSignal()
-
-    def __init__(self, doc_id, title):
-        super().__init__()
+    def __init__(self, doc_id, title, parent=None):
+        super(DocumentWidget, self).__init__(parent)
         self.doc_id = doc_id
-        icon_path = 'C:\\Users\\RM\\Documents\\GitHub\\paper_graph_database\\resourses\\essay.png'
-        # self.layout = QVBoxLayout(self)
-        self.layout = QHBoxLayout(self)
+        self.title = title
+
+        # Layout
+        self.layout = QVBoxLayout()
+
+        # Icon
         self.icon_label = QLabel()
-        self.icon_label.setPixmap(QPixmap(QIcon(icon_path).pixmap(15, 15)))  # Set the icon
-        self.title_label = QLabel(title)
+        icon_path = 'essay.png'
+        self.icon_label.setPixmap(QPixmap(icon_path).scaled(32, 32, Qt.AspectRatioMode.KeepAspectRatio))
 
-        self.layout.addWidget(self.icon_label)
-        self.layout.addWidget(self.title_label)
+        # Title
+        self.title_label = QLabel(self.title)
+        self.title_label.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding)
 
-        self.setMinimumHeight(30)
-        self.layout.addStretch()
+        # Arrange Icon and Title
+        self.horizontal_layout = QHBoxLayout()
+        self.horizontal_layout.addWidget(self.icon_label)
+        self.horizontal_layout.addWidget(self.title_label)
+        self.horizontal_layout.addStretch()
 
-        self.clicked.connect(self.mousePressEvent)
-
-    def mousePressEvent(self, event: QMouseEvent):
-        if event.button() == Qt.MouseButton.LeftButton:
-            self.clicked.emit()
-        if event.button() == Qt.MouseButton.RightButton:
-            self.open_menu()
-        super().mousePressEvent(event)
-
-    def mouseDoubleClickEvent(self, event: QMouseEvent):
-        if event.button() == Qt.MouseButton.LeftButton:
-            self.doubleClicked.emit()
-        super().mouseDoubleClickEvent(event)
-
-    def open_menu(self):
-        print("Right click event")
-
-    def select(self):
-        self.setStyleSheet("background-color: #e0e0e0")  # Change the color as per requirement
-
-    def deselect(self):
-        self.setStyleSheet("")
+        # Set layout
+        self.setLayout(self.horizontal_layout)
