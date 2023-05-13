@@ -67,7 +67,7 @@ class MainWindow(QMainWindow):
 
         # Layout with three columns
         self.keywords_list = KeywordExplorer([f'key{i}' for i in range(25)])
-        self.document_explorer = DocumentExplorer()
+        self.document_explorer = DocumentExplorer([(i, f"DOC_{i}") for i in range(55)])
         self.document_info = QTextEdit()
 
         # Main layout

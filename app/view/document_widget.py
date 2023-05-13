@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QWidget, QLabel, QVBoxLayout, QApplication
+from PyQt6.QtWidgets import QWidget, QLabel, QVBoxLayout, QApplication, QHBoxLayout
 from PyQt6.QtGui import QPixmap, QMouseEvent, QIcon
 from PyQt6.QtCore import Qt, pyqtSignal
 
@@ -11,15 +11,19 @@ class DocumentWidget(QWidget):
         super().__init__()
         self.doc_id = doc_id
         icon_path = 'C:\\Users\\RM\\Documents\\GitHub\\paper_graph_database\\resourses\\essay.png'
-        self.layout = QVBoxLayout(self)
+        # self.layout = QVBoxLayout(self)
+        self.layout = QHBoxLayout(self)
         self.icon_label = QLabel()
-        self.icon_label.setPixmap(QPixmap(QIcon(icon_path).pixmap(50, 50)))  # Set the icon
+        self.icon_label.setPixmap(QPixmap(QIcon(icon_path).pixmap(15, 15)))  # Set the icon
         self.title_label = QLabel(title)
 
         self.layout.addWidget(self.icon_label)
         self.layout.addWidget(self.title_label)
 
-        self.setFixedSize(70, 100)
+        self.setMinimumHeight(30)
+        self.layout.addStretch()
+
+        self.clicked.connect(self.mousePressEvent)
 
     def mousePressEvent(self, event: QMouseEvent):
         if event.button() == Qt.MouseButton.LeftButton:
