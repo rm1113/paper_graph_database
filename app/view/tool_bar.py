@@ -38,6 +38,7 @@ class ToolBar(QToolBar):
         self.add_keyword_dialog = AddKeywordDialog()
         self.add_keyword_dialog.show()
 
+
 class AddDocumentDialog(QDialog):
     def __init__(self):
         super(AddDocumentDialog, self).__init__()
@@ -56,9 +57,16 @@ class AddDocumentDialog(QDialog):
         file_layout.addWidget(self.browse_button)
         self.layout.addLayout(file_layout)
 
+        self.doi_layout = QHBoxLayout()
         self.doi_input = QLineEdit()
         self.doi_input.setPlaceholderText("DOI...")
-        self.layout.addWidget(self.doi_input)
+
+        self.doi_check_button = QPushButton("Check DOI")
+        self.doi_layout.addWidget(self.doi_input)
+        self.doi_layout.addWidget(self.doi_check_button)
+
+        self.layout.addLayout(self.doi_layout)
+        # self.layout.addWidget(self.doi_input)
 
         self.title_input = QLineEdit()
         self.title_input.setPlaceholderText("Title...")
