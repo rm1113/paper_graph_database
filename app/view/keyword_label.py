@@ -2,13 +2,14 @@ from PyQt6.QtWidgets import QLabel
 
 
 class KeywordLabel(QLabel):
-    def __init__(self, name, color="#5dade2"):
+    def __init__(self, key_id, name, color="#5dade2"):
         super().__init__()
 
         self.setMaximumSize(200, 30)
         self.setText(name)
         self.color = color
         self.update_style()
+        self.key_id = key_id
 
     def update_style(self):
         label_style = f"""

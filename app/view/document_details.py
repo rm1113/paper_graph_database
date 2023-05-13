@@ -3,9 +3,7 @@ from PyQt6.QtWidgets import (
     QVBoxLayout,
     QHBoxLayout,
     QLabel,
-    QPushButton,
-    QLineEdit)
-from PyQt6.QtGui import QFont
+    QPushButton)
 from PyQt6.QtCore import pyqtSlot
 from app.view.keyword_explorer import KeywordExplorer
 
@@ -16,22 +14,25 @@ class DocumentDetails(QWidget):
 
         layout = QVBoxLayout()
 
-        # Document name
-        self.doc_name = QLabel('Document Name')
-        self.doc_name.setFont(QFont('Arial', 20))
-        layout.addWidget(self.doc_name)
+        # Document title
+        self.doc_name_label = QLabel('Document Title:')
+        self.doc_name_data = QLabel("-")
+        [layout.addWidget(w) for w in [self.doc_name_label, self.doc_name_data]]
 
         # Document author
-        self.doc_author = QLabel('Author: ')
-        layout.addWidget(self.doc_author)
+        self.doc_author_label = QLabel('Author: ')
+        self.doc_author_data = QLabel('-')
+        [layout.addWidget(w) for w in [self.doc_author_label, self.doc_author_data]]
 
         # DOI field
-        self.doi_field = QLabel('DOI: ')
-        layout.addWidget(self.doi_field)
+        self.doi_field_label = QLabel('DOI: ')
+        self.doi_field_data = QLabel('-')
+        [layout.addWidget(w) for w in [self.doi_field_label, self.doi_field_data]]
 
         # Date field
-        self.date_field = QLabel('Date: ')
-        layout.addWidget(self.date_field)
+        self.date_field_label = QLabel('Date: ')
+        self.date_field_data = QLabel('-')
+        [layout.addWidget(w) for w in [self.date_field_label, self.date_field_data]]
 
         # Keyword bar
         self.keyword_bar = KeywordExplorer()
@@ -60,10 +61,6 @@ class DocumentDetails(QWidget):
 
         self.set_enabled(False)
 
-    # @pyqtSlot
-    # def set_enabled_slot(self):
-    #     self.set_enabled(True)
-
     @pyqtSlot(bool)
     def set_enabled(self, enabled):
         self.setEnabled(enabled)
@@ -71,3 +68,18 @@ class DocumentDetails(QWidget):
             self.setStyleSheet("")  # Return to default style when enabled
         else:
             self.setStyleSheet("QWidget { background-color: #D3D3D3 }")  # Greyed out when disabled
+
+    def update_data(self, document_info):
+        title = document_info['title']
+        doi = document_info['doi']
+        author = document_info['author']
+        date = document_info['date']
+
+        self.doc_name_data.setText(self.get_string(title))
+        self.doi_field_data.setText(self.get_string(doi))
+        self.doc_author_data.setText(self.get_string(author))
+        self.date_field_data.setText(self.get_string(date))
+
+    @staticmethod
+    def get_string(value):
+        return "-" if value is None else value
