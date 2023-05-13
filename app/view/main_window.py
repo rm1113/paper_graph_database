@@ -17,6 +17,8 @@ from PyQt6.QtCore import Qt
 from app.view.welcome_window import WelcomeWindow
 from app.view.filter_bar import FilterBar
 from app.view.keyword_explorer import KeywordExplorer
+from app.view.tool_bar import ToolBar
+from app.view.document_explorer import DocumentExplorer
 
 
 class MainWindow(QMainWindow):
@@ -57,17 +59,15 @@ class MainWindow(QMainWindow):
         """)
 
         # Toolbar
-        self.toolbar = QToolBar()
+        self.toolbar = ToolBar()
         self.addToolBar(self.toolbar)
-        self.toolbar.addAction("Add Document")
-        self.toolbar.addAction("Add Keyword")
 
         # Filter bar
         self.filter_bar = FilterBar()
 
         # Layout with three columns
         self.keywords_list = KeywordExplorer([f'key{i}' for i in range(25)])
-        self.document_explorer = QListWidget()
+        self.document_explorer = DocumentExplorer()
         self.document_info = QTextEdit()
 
         # Main layout
