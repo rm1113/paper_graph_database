@@ -66,7 +66,6 @@ class AddDocumentDialog(QDialog):
         self.doi_layout.addWidget(self.doi_check_button)
 
         self.layout.addLayout(self.doi_layout)
-        # self.layout.addWidget(self.doi_input)
 
         self.title_input = QLineEdit()
         self.title_input.setPlaceholderText("Title...")

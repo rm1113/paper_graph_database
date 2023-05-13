@@ -1,15 +1,20 @@
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QScrollArea, QFrame
-from PyQt6.QtCore import Qt, QEvent
+from PyQt6.QtCore import Qt, QEvent, pyqtSignal
 from PyQt6.QtGui import QContextMenuEvent
 from app.view.document_widget import DocumentWidget
 
 
 class DocumentExplorer(QWidget):
-    def __init__(self, documents=None):
+    document_selected = pyqtSignal()
+
+    def __init__(self, documents=None, signal_to_connect_with_selection=None):
         super(DocumentExplorer, self).__init__()
 
         if documents is None:
             documents = []
+
+        # if signal_to_connect_with_selection is not None:
+        #     self.document_selected.connect(signal_to_connect_with_selection)
 
         self.layout = QVBoxLayout()
         self.layout.setAlignment(Qt.AlignmentFlag.AlignTop)
@@ -47,6 +52,7 @@ class DocumentExplorer(QWidget):
         if event.type() == QEvent.Type.MouseButtonPress:
             if event.button() == Qt.MouseButton.LeftButton:
                 self.deselect_all_except(obj)
+                self.document_selected.emit()
             elif event.button() == Qt.MouseButton.RightButton:
                 print("Right click placeholder")
         elif event.type() == QEvent.Type.MouseButtonDblClick:
@@ -60,3 +66,7 @@ class DocumentExplorer(QWidget):
                 w.setStyleSheet("")
             else:
                 w.setStyleSheet("background-color: #ADD8E6;")
+
+    # @pyqtSignal(bool)
+    # def document_selected(self):
+    #     return True

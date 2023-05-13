@@ -19,6 +19,7 @@ from app.view.filter_bar import FilterBar
 from app.view.keyword_explorer import KeywordExplorer
 from app.view.tool_bar import ToolBar
 from app.view.document_explorer import DocumentExplorer
+from app.view.document_details import DocumentDetails
 
 
 class MainWindow(QMainWindow):
@@ -68,7 +69,7 @@ class MainWindow(QMainWindow):
         # Layout with three columns
         self.keywords_list = KeywordExplorer([f'key{i}' for i in range(25)])
         self.document_explorer = DocumentExplorer([(i, f"DOC_{i}") for i in range(55)])
-        self.document_info = QTextEdit()
+        self.document_info = DocumentDetails()
 
         # Main layout
         self.main_layout = QVBoxLayout()
@@ -84,6 +85,9 @@ class MainWindow(QMainWindow):
         self.central_widget = QWidget()
         self.central_widget.setLayout(self.main_layout)
         self.setCentralWidget(self.central_widget)
+
+        # Widget connections
+        self.document_explorer.document_selected.connect(lambda: self.document_info.set_enabled(True))
 
 
 if __name__ == "__main__":
