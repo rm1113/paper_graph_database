@@ -72,10 +72,17 @@ class MainWindow(QMainWindow):
 
         # Filter bar
         self.filter_bar = FilterBar()
+        self.filter_bar.add_to_filter.connect(self.add_to_filter)
+        self.filter_bar.remove_from_filter.connect(self.remove_from_filter)
+        self.filter_bar.filter_by_only.connect(self.filter_by_only)
+        self.filter_bar.update_filter([(i, f"key{i}") for i in range(5)])  # TODO: remove
 
         # Layout with three columns
-        self.keywords_list = KeywordExplorer([f'key{i}' for i in range(25)])
-        self.document_explorer = DocumentExplorer([(i, f"DOC_{i}") for i in range(55)])
+        # Keyword Explorer
+        self.keywords_list = KeywordExplorer([(i, f'key{i}') for i in range(25)])  # TODO: remove
+        self.keywords_list.add_to_filter.connect(self.add_to_filter)
+        self.keywords_list.filter_by_only.connect(self.filter_by_only)
+        self.document_explorer = DocumentExplorer([(i, f"DOC_{i}") for i in range(55)])  # TODO: remove
         self.document_info = DocumentDetails()
 
         # Main layout
@@ -96,6 +103,8 @@ class MainWindow(QMainWindow):
         # Widget connections
         self.document_explorer.document_selected.connect(lambda: self.document_info.set_enabled(True))
 
+        # TODO: add update function
+
     @pyqtSlot(str)
     def on_file_selected(self, file):
         # TODO: file validation
@@ -113,6 +122,21 @@ class MainWindow(QMainWindow):
 
     def begin(self):
         self.welcome_window.show()
+
+    @pyqtSlot(int)
+    def add_to_filter(self, key_id):
+        print(f"Add to filter key_id={key_id}")
+        # TODO: implement
+
+    @pyqtSlot(int)
+    def remove_from_filter(self, key_id):
+        print(f"Remove from filter key_id={key_id}")
+        # TODO: implement
+
+    @pyqtSlot(int)
+    def filter_by_only(self, key_id):
+        print(f"Filter by only key_id={key_id}")
+        # TODO: implement
 
 
 if __name__ == "__main__":
