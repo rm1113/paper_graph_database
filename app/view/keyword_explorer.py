@@ -3,14 +3,16 @@ from PyQt6.QtWidgets import (
     QVBoxLayout,
     QLabel,
     QScrollArea,
-    QFrame)
-from PyQt6.QtCore import pyqtSignal
+    QFrame,
+    QMessageBox)
+from PyQt6.QtCore import pyqtSignal, pyqtSlot
 from app.view.keyword_label import KeywordLabel
 
 
 class KeywordExplorer(QWidget):
     add_to_filter = pyqtSignal(int)
     filter_by_only = pyqtSignal(int)
+    remove_from_db = pyqtSignal(int)
 
     def __init__(self, keyword_list=None):
         super(KeywordExplorer, self).__init__()
@@ -54,6 +56,7 @@ class KeywordExplorer(QWidget):
             label = KeywordLabel(key_id, key_name, color)
             label.add_to_filter.connect(self.add_to_filter.emit)
             label.filter_by_only.connect(self.filter_by_only.emit)
+            label.remove_from_filter.connect(self.handle_remove_from_db)
             # Add label to the layout
             self.keywords_layout.addWidget(label)
         self.keywords_layout.addStretch()
@@ -63,3 +66,13 @@ class KeywordExplorer(QWidget):
             child = self.keywords_layout.takeAt(0)
             if child.widget():
                 child.widget().deleteLater()
+
+    @pyqtSlot(int)
+    def handle_remove_from_db(self, key_id):
+        confirm = QMessageBox.question(
+            self, 'Remove keyword',
+            'Are you sure you want remove this keyword from the database?',
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
+        )
+        if confirm == QMessageBox.StandardButton.Yes:
+            self.remove_from_db.emit(key_id)

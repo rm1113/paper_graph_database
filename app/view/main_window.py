@@ -82,6 +82,9 @@ class MainWindow(QMainWindow):
         self.keywords_list = KeywordExplorer([(i, f'key{i}') for i in range(25)])  # TODO: remove
         self.keywords_list.add_to_filter.connect(self.add_to_filter)
         self.keywords_list.filter_by_only.connect(self.filter_by_only)
+        self.keywords_list.remove_from_db.connect(self.remove_keyword_from_db)
+
+        # Document explorer
         self.document_explorer = DocumentExplorer([(i, f"DOC_{i}") for i in range(55)])  # TODO: remove
         self.document_info = DocumentDetails()
 
@@ -136,6 +139,11 @@ class MainWindow(QMainWindow):
     @pyqtSlot(int)
     def filter_by_only(self, key_id):
         print(f"Filter by only key_id={key_id}")
+        # TODO: implement
+
+    @pyqtSlot(int)
+    def remove_keyword_from_db(self, key_id):
+        print(f"Remove keyword from database: key_id={key_id}")
         # TODO: implement
 
 
