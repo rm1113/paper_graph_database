@@ -12,7 +12,7 @@ from PyQt6.QtWidgets import (
     QTextEdit,
     QGridLayout
 )
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, pyqtSlot
 
 from app.view.welcome_window import WelcomeWindow
 from app.view.filter_bar import FilterBar
@@ -25,6 +25,13 @@ from app.view.document_details import DocumentDetails
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
+
+        self.db_file = None
+
+        # Connect welcome window
+        self.welcome_window = WelcomeWindow()
+        self.welcome_window.file_selected.connect(self.on_file_selected)
+        self.welcome_window.create_database_button.clicked.connect(self.on_new_database)
 
         self.setWindowTitle("Document Manager")
         self.setGeometry(100, 100, 800, 600)
@@ -89,24 +96,29 @@ class MainWindow(QMainWindow):
         # Widget connections
         self.document_explorer.document_selected.connect(lambda: self.document_info.set_enabled(True))
 
+    @pyqtSlot(str)
+    def on_file_selected(self, file):
+        # TODO: file validation
+        self.db_file = file
+        print(f"DB file catched: {file}")
+        self.welcome_window.close()
+        self.show()
+
+    @pyqtSlot()
+    def on_new_database(self):
+        self.db_file = None
+        print("New DB ")
+        self.welcome_window.close()
+        self.show()
+
+    def begin(self):
+        self.welcome_window.show()
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
 
     main_window = MainWindow()
-    welcome_window = WelcomeWindow()
+    main_window.begin()
 
-    # Connect the welcome window buttons to show the main window and close the welcome window
-    def open_database():
-        main_window.show()
-        welcome_window.close()
-
-    def create_database():
-        main_window.show()
-        welcome_window.close()
-
-    welcome_window.open_database_button.clicked.connect(open_database)
-    welcome_window.create_database_button.clicked.connect(create_database)
-
-    welcome_window.show()
     sys.exit(app.exec())

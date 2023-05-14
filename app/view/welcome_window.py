@@ -3,15 +3,18 @@ from PyQt6.QtWidgets import (
     QVBoxLayout,
     QHBoxLayout,
     QLabel,
-    QPushButton
+    QPushButton,
+    QFileDialog
 )
 
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, pyqtSlot, pyqtSignal
 
 
 class WelcomeWindow(QDialog):
+    file_selected = pyqtSignal(str)
+
     def __init__(self):
-        super().__init__()
+        super(WelcomeWindow, self).__init__()
 
         self.setWindowTitle("Welcome")
         self.setGeometry(400, 400, 300, 200)
@@ -23,6 +26,9 @@ class WelcomeWindow(QDialog):
         # Buttons
         self.open_database_button = QPushButton("Open Database")
         self.create_database_button = QPushButton("Create Database")
+
+        # Connections
+        self.open_database_button.clicked.connect(self.browse_file)
 
         # Set the custom style for the buttons
         button_style = """
@@ -52,4 +58,17 @@ class WelcomeWindow(QDialog):
         self.main_layout.addLayout(second_layout)
         self.setLayout(self.main_layout)
 
+        self.setModal(True)
+
+    @pyqtSlot()
+    def browse_file(self):
+        file, _ = QFileDialog.getOpenFileName(self, "Open Database")
+        if file:
+            self.file_selected.emit(file)
+            print(f"Selected file: {file}")
+
+    # @pyqtSlot()
+    # def new_db(self):
+    #     self.file_selected.emit(None)
+    #     print(f"New database created")
 
