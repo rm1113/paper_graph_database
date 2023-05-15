@@ -75,7 +75,7 @@ class MainWindow(QMainWindow):
         self.filter_bar.add_to_filter.connect(self.add_to_filter)
         self.filter_bar.remove_from_filter.connect(self.remove_from_filter)
         self.filter_bar.filter_by_only.connect(self.filter_by_only)
-        self.filter_bar.update_filter([(i, f"key{i}") for i in range(5)])  # TODO: remove
+        self.filter_bar.update_filter([(i, f"key{i}") for i in range(25)])  # TODO: remove
 
         # Layout with three columns
         # Keyword Explorer

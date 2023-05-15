@@ -1,9 +1,9 @@
 from app.view.keyword_label import KeywordLabel
-from PyQt6.QtWidgets import QHBoxLayout, QWidget
-from PyQt6.QtCore import pyqtSignal
+from PyQt6.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget, QFrame, QScrollArea
+from PyQt6.QtCore import pyqtSignal, Qt
 
 
-class FilterBar(QWidget):
+class FilterBar(QFrame):
     add_to_filter = pyqtSignal(int)
     filter_by_only = pyqtSignal(int)
     remove_from_filter = pyqtSignal(int)
@@ -12,8 +12,31 @@ class FilterBar(QWidget):
         # TODO: add clear filter function
         super(FilterBar, self).__init__()
         self.colors = ['#5dade2', "#f1948a", "#58d68d"]
+
+        self.setFrameShape(QFrame.Shape.NoFrame)
+        self.setFrameShadow(QFrame.Shadow.Sunken)
+        self.setMaximumHeight(90)
+
         self.layout = QHBoxLayout()
-        self.setLayout(self.layout)
+
+        # scroll area
+        self.scroll_area = QScrollArea()
+        self.scroll_area.setWidgetResizable(True)
+        self.scroll_area.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
+        self.scroll_area.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+
+        self.scroll_widget = QWidget()
+
+        self.scroll_widget.setLayout(self.layout)
+
+        self.scroll_area.setWidget(self.scroll_widget)
+
+        # Create a layout for the FilterBar and add the scroll area to it
+        main_layout = QVBoxLayout()
+        main_layout.addWidget(self.scroll_area)
+        self.scroll_area.setMaximumHeight(80)
+        self.setLayout(main_layout)
+        main_layout.addStretch()
 
     def clear_layout(self):
         while self.layout.count():
