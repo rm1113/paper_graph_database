@@ -129,17 +129,22 @@ class MainWindow(QMainWindow):
     @pyqtSlot(int)
     def add_to_filter(self, key_id):
         print(f"Add to filter key_id={key_id}")
+        key_name = f"key_{key_id}"  # TODO: get from controller
+        self.filter_bar.add_keyword_to_filter(key_id, key_name)
         # TODO: implement
 
     @pyqtSlot(int)
     def remove_from_filter(self, key_id):
         print(f"Remove from filter key_id={key_id}")
-        # TODO: implement
+        self.filter_bar.remove_keyword_from_filter(key_id)
+        # TODO: update filter in controller
 
     @pyqtSlot(int)
     def filter_by_only(self, key_id):
         print(f"Filter by only key_id={key_id}")
-        # TODO: implement
+        key_name = f"key_{key_id}"
+        self.filter_bar.update_filter([(key_id, key_name)])
+        # TODO: update controller filter
 
     @pyqtSlot(int)
     def remove_keyword_from_db(self, key_id):

@@ -1,6 +1,6 @@
 from app.view.keyword_label import KeywordLabel
 from PyQt6.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget, QFrame, QScrollArea, QPushButton
-from PyQt6.QtCore import pyqtSignal, Qt
+from PyQt6.QtCore import pyqtSignal, Qt, pyqtSlot
 
 
 class FilterBar(QWidget):
@@ -11,10 +11,10 @@ class FilterBar(QWidget):
     def __init__(self):
         # TODO: add clear filter function
         super(FilterBar, self).__init__()
+        self.keyword_ids = []
 
-        # self.setFrameShape(QFrame.Shape.NoFrame)
-        # self.setFrameShadow(QFrame.Shadow.Sunken)
         self.setMaximumHeight(90)
+
 
         self.filter_layout = QHBoxLayout()
         self.clear_button = QPushButton('Clear filter')  # TODO: replace with icon
@@ -43,9 +43,13 @@ class FilterBar(QWidget):
         self.setLayout(main_layout)
         main_layout.addStretch()
 
+        self.keywords_layout.addStretch()
+        self.filter_layout.addStretch()
+
     def clear_filter(self):
         self.clear_filter_signal.emit()
         self.clear_layout()
+        self.keyword_ids = []
 
     def clear_layout(self):
         while self.keywords_layout.count():
@@ -55,14 +59,30 @@ class FilterBar(QWidget):
 
     def update_filter(self, keyword_list):
         self.clear_layout()
+        self.keyword_ids = []
         for i, keyword in enumerate(keyword_list):
-            # Get id, name and color for the label
+            # Get id and name for the label
             key_id, key_name = keyword
+            self.keyword_ids.append(key_id)
             # Create label and connect signals
             label = KeywordLabel(key_id, key_name)
             label.remove_from_filter.connect(self.remove_from_filter.emit)
             label.filter_by_only.connect(self.filter_by_only.emit)
             # Add label to the layout
             self.keywords_layout.addWidget(label)
-        self.keywords_layout.addStretch()
-        self.filter_layout.addStretch()
+
+    def add_keyword_to_filter(self, key_id, key_name):
+        if key_id not in self.keyword_ids:
+            label = KeywordLabel(key_id, key_name)
+            label.remove_from_filter.connect(self.remove_from_filter.emit)
+            label.filter_by_only.connect(self.filter_by_only.emit)
+            self.keywords_layout.addWidget(label)
+            self.keyword_ids.append(key_id)
+
+    def remove_keyword_from_filter(self, key_id):
+        for i in range(self.keywords_layout.count()):
+            widget = self.keywords_layout.itemAt(i).widget()
+            if isinstance(widget, KeywordLabel) and widget.key_id == key_id:
+                widget.setParent(None)  # This removes the widget from layout
+                self.keyword_ids.remove(key_id)
+                break
