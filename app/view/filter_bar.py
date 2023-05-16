@@ -15,7 +15,6 @@ class FilterBar(QWidget):
 
         self.setMaximumHeight(90)
 
-
         self.filter_layout = QHBoxLayout()
         self.clear_button = QPushButton('Clear filter')  # TODO: replace with icon
         self.clear_button.clicked.connect(self.clear_filter)
