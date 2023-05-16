@@ -74,6 +74,7 @@ class MainWindow(QMainWindow):
         self.filter_bar = FilterBar()
         self.filter_bar.remove_from_filter.connect(self.remove_from_filter)
         self.filter_bar.filter_by_only.connect(self.filter_by_only)
+        self.filter_bar.clear_filter_signal.connect(self.clear_filter)
         self.filter_bar.update_filter([(i, f"key{i}") for i in range(25)])  # TODO: remove
 
         # Layout with three columns
@@ -145,6 +146,9 @@ class MainWindow(QMainWindow):
         print(f"Remove keyword from database: key_id={key_id}")
         # TODO: implement
 
+    @pyqtSlot()
+    def clear_filter(self):
+        print("CLEAR FILTER")  # TODO: implement
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

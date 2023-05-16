@@ -21,7 +21,6 @@ class KeywordExplorer(QWidget):
             keyword_list = []
 
         self.setMinimumWidth(150)
-        self.colors = ['#5dade2', "#f1948a", "#58d68d"]
 
         self.layout = QVBoxLayout()
 
@@ -48,12 +47,11 @@ class KeywordExplorer(QWidget):
     def update_keywords(self, keyword_list):
         self.clear_keywords_layout()
         for i, keyword in enumerate(keyword_list):
-            # Set color, id and name
-            color = self.colors[i % len(self.colors)]
+            # Set id and name
             key_id = keyword[0]
             key_name = keyword[1]
             # Create label and connect signals
-            label = KeywordLabel(key_id, key_name, color)
+            label = KeywordLabel(key_id, key_name)
             label.add_to_filter.connect(self.add_to_filter.emit)
             label.filter_by_only.connect(self.filter_by_only.emit)
             label.remove_from_filter.connect(self.handle_remove_from_db)

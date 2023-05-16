@@ -8,12 +8,14 @@ class KeywordLabel(QLabel):
     filter_by_only = pyqtSignal(int)
     remove_from_filter = pyqtSignal(int)
 
-    def __init__(self, key_id, name, color="#5dade2"):
+    def __init__(self, key_id, name):
         super().__init__()
+
+        self.colors = ['#5dade2', "#f1948a", "#58d68d"]
 
         self.setMaximumSize(200, 30)
         self.setText(name)
-        self.color = color
+        self.color = self.colors[key_id % len(self.colors)]
         self.update_style()
         self.key_id = key_id
 
