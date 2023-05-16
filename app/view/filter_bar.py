@@ -3,8 +3,7 @@ from PyQt6.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget, QFrame, QScrollAr
 from PyQt6.QtCore import pyqtSignal, Qt
 
 
-class FilterBar(QFrame):
-    add_to_filter = pyqtSignal(int)
+class FilterBar(QWidget):
     filter_by_only = pyqtSignal(int)
     remove_from_filter = pyqtSignal(int)
 
@@ -13,8 +12,8 @@ class FilterBar(QFrame):
         super(FilterBar, self).__init__()
         self.colors = ['#5dade2', "#f1948a", "#58d68d"]
 
-        self.setFrameShape(QFrame.Shape.NoFrame)
-        self.setFrameShadow(QFrame.Shadow.Sunken)
+        # self.setFrameShape(QFrame.Shape.NoFrame)
+        # self.setFrameShadow(QFrame.Shadow.Sunken)
         self.setMaximumHeight(90)
 
         self.layout = QHBoxLayout()
@@ -52,7 +51,6 @@ class FilterBar(QFrame):
             color = self.colors[i % len(self.colors)]
             # Create label and connect signals
             label = KeywordLabel(key_id, key_name, color)
-            label.add_to_filter.connect(self.add_to_filter.emit)
             label.remove_from_filter.connect(self.remove_from_filter.emit)
             label.filter_by_only.connect(self.filter_by_only.emit)
             # Add label to the layout
