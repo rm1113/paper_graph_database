@@ -86,9 +86,12 @@ class MainWindow(QMainWindow):
 
         # Document explorer
         self.document_explorer = DocumentExplorer([(i, f"DOC_{i}") for i in range(55)])  # TODO: remove
+        self.document_explorer.select_document_signal.connect(self.select_document_slot)
 
         # Document info window
         self.document_info = DocumentDetails()
+        self.document_info.add_to_filter.connect(self.add_to_filter)
+        self.document_info.filter_by_only.connect(self.filter_by_only)
 
         # Main layout
         self.main_layout = QVBoxLayout()
@@ -158,7 +161,7 @@ class MainWindow(QMainWindow):
         print("CLEAR FILTER")  # TODO: implement
 
     @pyqtSlot(int)
-    def select_document(self, doc_id):
+    def select_document_slot(self, doc_id):
         # TODO: get data from controller
         doc_info = {
             'title': f'Document #{doc_id}',
@@ -166,7 +169,8 @@ class MainWindow(QMainWindow):
             'author': 'Me',
             'date': 'Now'
         }
-        self.document_info.update(doc_info)
+        key_lists = [(doc_id+i, f"key_{doc_id+i}") for i in range(3)]
+        self.document_info.update_data(doc_info, key_lists)
 
 
 if __name__ == "__main__":

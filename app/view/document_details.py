@@ -4,11 +4,14 @@ from PyQt6.QtWidgets import (
     QHBoxLayout,
     QLabel,
     QPushButton)
-from PyQt6.QtCore import pyqtSlot
+from PyQt6.QtCore import pyqtSlot, pyqtSignal
 from app.view.keyword_explorer import KeywordExplorer
 
 
 class DocumentDetails(QWidget):
+    add_to_filter = pyqtSignal(int)
+    filter_by_only = pyqtSignal(int)
+
     def __init__(self):
         super().__init__()
 
@@ -36,6 +39,8 @@ class DocumentDetails(QWidget):
 
         # Keyword bar
         self.keyword_bar = KeywordExplorer()
+        self.keyword_bar.add_to_filter.connect(self.add_to_filter.emit)
+        self.keyword_bar.filter_by_only.connect(self.filter_by_only.emit)
         layout.addWidget(self.keyword_bar)
 
         # Button to add keyword
@@ -69,7 +74,7 @@ class DocumentDetails(QWidget):
         else:
             self.setStyleSheet("QWidget { background-color: #D3D3D3 }")  # Greyed out when disabled
 
-    def update_data(self, document_info):
+    def update_data(self, document_info, key_id_list):
         title = document_info['title']
         doi = document_info['doi']
         author = document_info['author']
@@ -79,6 +84,8 @@ class DocumentDetails(QWidget):
         self.doi_field_data.setText(self.get_string(doi))
         self.doc_author_data.setText(self.get_string(author))
         self.date_field_data.setText(self.get_string(date))
+
+        self.keyword_bar.update_keywords(key_id_list)
 
     @staticmethod
     def get_string(value):
