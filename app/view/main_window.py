@@ -86,6 +86,8 @@ class MainWindow(QMainWindow):
 
         # Document explorer
         self.document_explorer = DocumentExplorer([(i, f"DOC_{i}") for i in range(55)])  # TODO: remove
+
+        # Document info window
         self.document_info = DocumentDetails()
 
         # Main layout
@@ -104,7 +106,7 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.central_widget)
 
         # Widget connections
-        self.document_explorer.document_selected.connect(lambda: self.document_info.set_enabled(True))
+        self.document_explorer.select_document_signal.connect(lambda: self.document_info.set_enabled(True))
 
         # TODO: add update function
 
@@ -154,6 +156,18 @@ class MainWindow(QMainWindow):
     @pyqtSlot()
     def clear_filter(self):
         print("CLEAR FILTER")  # TODO: implement
+
+    @pyqtSlot(int)
+    def select_document(self, doc_id):
+        # TODO: get data from controller
+        doc_info = {
+            'title': f'Document #{doc_id}',
+            'doi': f"doi:{doc_id}",
+            'author': 'Me',
+            'date': 'Now'
+        }
+        self.document_info.update(doc_info)
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

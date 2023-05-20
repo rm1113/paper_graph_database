@@ -1,9 +1,13 @@
 from PyQt6.QtWidgets import QWidget, QLabel, QVBoxLayout, QHBoxLayout, QSizePolicy
 from PyQt6.QtGui import QPixmap, QIcon
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, pyqtSignal, QTimer
 
 
 class DocumentWidget(QWidget):
+    select_document_signal = pyqtSignal(int)
+    open_document_signal = pyqtSignal(int)
+    open_doc_menu_signal = pyqtSignal(int)
+
     def __init__(self, doc_id, title, parent=None):
         super(DocumentWidget, self).__init__(parent)
         self.doc_id = doc_id
@@ -11,6 +15,9 @@ class DocumentWidget(QWidget):
 
         # Layout
         self.layout = QVBoxLayout()
+        # self.timer = QTimer()
+        # self.timer.setSingleShot(True)
+        # self.timer.timeout.connect(self.handle_timeout)
 
         # Icon
         self.icon_label = QLabel()
@@ -29,3 +36,17 @@ class DocumentWidget(QWidget):
 
         # Set layout
         self.setLayout(self.horizontal_layout)
+
+    def mousePressEvent(self, ev):
+        if ev.button() == Qt.MouseButton.LeftButton:
+            self.select_document_signal.emit(self.doc_id)
+        elif ev.button() == Qt.MouseButton.RightButton:
+            self.open_menu()  # TODO: upgrade
+            # self.open_doc_menu_signal.emit(self.key_id)
+
+    def mouseDoubleClickEvent(self, a0):
+        if a0.button() == Qt.MouseButton.LeftButton:
+            self.open_document_signal.emit(self.doc_id)
+
+    def open_menu(self):
+        print(f"Open document menu for doc: {self.doc_id}")
