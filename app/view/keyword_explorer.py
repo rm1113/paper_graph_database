@@ -20,6 +20,7 @@ class KeywordExplorer(QWidget):
         if keyword_list is None:
             keyword_list = []
 
+        self.keyword_ids = []
         self.setMinimumWidth(150)
 
         self.layout = QVBoxLayout()
@@ -46,6 +47,7 @@ class KeywordExplorer(QWidget):
 
     def update_keywords(self, keyword_list):
         self.clear_keywords_layout()
+        self.keyword_ids = []
         for i, keyword in enumerate(keyword_list):
             # Set id and name
             key_id = keyword[0]
@@ -57,6 +59,7 @@ class KeywordExplorer(QWidget):
             label.remove_from_filter.connect(self.handle_remove_from_db)
             # Add label to the layout
             self.keywords_layout.addWidget(label)
+            self.keyword_ids.append(key_id)
         self.keywords_layout.addStretch()
 
     def clear_keywords_layout(self):
@@ -64,6 +67,7 @@ class KeywordExplorer(QWidget):
             child = self.keywords_layout.takeAt(0)
             if child.widget():
                 child.widget().deleteLater()
+        self.keyword_ids = []
 
     @pyqtSlot(int)
     def handle_remove_from_db(self, key_id):

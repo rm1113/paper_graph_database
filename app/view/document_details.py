@@ -3,7 +3,8 @@ from PyQt6.QtWidgets import (
     QVBoxLayout,
     QHBoxLayout,
     QLabel,
-    QPushButton)
+    QPushButton,
+    QDialog)
 from PyQt6.QtCore import pyqtSlot, pyqtSignal
 from app.view.keyword_explorer import KeywordExplorer
 
@@ -53,6 +54,7 @@ class DocumentDetails(QWidget):
 
         # Button to add keyword
         self.add_keyword_button = QPushButton('Add keyword')
+        self.add_keyword_button.clicked.connect(self.open_update_keyword_dialog)
         layout.addWidget(self.add_keyword_button)
 
         # Button to show all connected documents
@@ -73,6 +75,8 @@ class DocumentDetails(QWidget):
         self.setLayout(layout)
 
         self.set_enabled(False)
+
+        self.update_keyword_dialog = None
 
     @pyqtSlot(bool)
     def set_enabled(self, enabled):
@@ -103,3 +107,48 @@ class DocumentDetails(QWidget):
     def emit_open_doc_signal(self):
         if self.doc_id is not None:
             self.open_document_signal.emit(self.doc_id)
+
+    def open_update_keyword_dialog(self):
+        self.update_keyword_dialog = UpdateKeywordListDialog()
+        self.update_keyword_dialog.show()
+
+
+class UpdateKeywordListDialog(QDialog):
+    def __init__(self):
+        super().__init__()
+
+        self.setWindowTitle('Add Existing Keyword')
+
+        self.setGeometry(150, 150, 300, 400)  # TODO: make it more user friendly
+        self.layout = QVBoxLayout()
+
+        self.layout_key_control = QHBoxLayout()
+
+        self.full_keyword_bar = KeywordExplorer()
+
+        self.layout_move_buttons = QVBoxLayout()
+        self.button_right = QPushButton("->")
+        self.button_left = QPushButton("<-")
+        self.layout_move_buttons.addWidget(self.button_right)
+        self.layout_move_buttons.addWidget(self.button_left)
+
+        self.current_keyword_bar = KeywordExplorer()
+
+        self.layout_key_control.addWidget(self.full_keyword_bar)
+        self.layout_key_control.addLayout(self.layout_move_buttons)
+        self.layout_key_control.addWidget(self.current_keyword_bar)
+
+        self.layout_control_buttons = QHBoxLayout()
+        self.confirm_button = QPushButton("Confirm", clicked=self.accept)
+        self.cancel_button = QPushButton("Cancel", clicked=self.reject)
+        self.layout_control_buttons.addWidget(self.confirm_button)
+        self.layout_control_buttons.addWidget(self.cancel_button)
+
+        self.layout.addLayout(self.layout_key_control)
+        self.layout.addLayout(self.layout_control_buttons)
+
+        self.setLayout(self.layout)
+        self.setModal(True)
+
+    def get_values(self):
+        return self.current_keyword_bar.keyword_ids
