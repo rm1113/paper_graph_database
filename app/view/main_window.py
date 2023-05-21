@@ -94,6 +94,7 @@ class MainWindow(QMainWindow):
         self.document_info.add_to_filter.connect(self.add_to_filter)
         self.document_info.filter_by_only.connect(self.filter_by_only)
         self.document_info.open_document_signal.connect(self.open_file_in_os)
+        self.document_info.show_all_connected_signal.connect(self.show_all_connected_documents)
 
         # Main layout
         self.main_layout = QVBoxLayout()
@@ -178,6 +179,11 @@ class MainWindow(QMainWindow):
     def open_file_in_os(self, doc_id):
         print(f"Open file with id:{doc_id}")
         # TODO: implement
+
+    def show_all_connected_documents(self, doc_id):
+        docs = [(doc_id+i, f'doc_{doc_id+i}') for i in range(3)]  # TODO: get documents from controller
+        self.document_explorer.update_documents(docs)
+        self.filter_bar.clear_filter()  # TODO: check for more smooth solution
 
 
 if __name__ == "__main__":

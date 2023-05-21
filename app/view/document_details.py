@@ -13,6 +13,7 @@ class DocumentDetails(QWidget):
     add_to_filter = pyqtSignal(int)
     filter_by_only = pyqtSignal(int)
     open_document_signal = pyqtSignal(int)
+    show_all_connected_signal = pyqtSignal(int)
 
     def __init__(self):
         super().__init__()
@@ -59,6 +60,7 @@ class DocumentDetails(QWidget):
 
         # Button to show all connected documents
         self.show_docs_button = QPushButton('Show connected documents')
+        self.show_docs_button.clicked.connect(self.emit_show_all_connected)
         layout.addWidget(self.show_docs_button)
 
         # Button to edit document info
@@ -112,6 +114,9 @@ class DocumentDetails(QWidget):
         self.update_keyword_dialog = UpdateKeywordListDialog()
         self.update_keyword_dialog.show()
 
+    def emit_show_all_connected(self):
+        self.show_all_connected_signal.emit(self.doc_id)
+
 
 class UpdateKeywordListDialog(QDialog):
     def __init__(self):
@@ -152,3 +157,4 @@ class UpdateKeywordListDialog(QDialog):
 
     def get_values(self):
         return self.current_keyword_bar.keyword_ids
+
