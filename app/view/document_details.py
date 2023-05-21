@@ -11,9 +11,12 @@ from app.view.keyword_explorer import KeywordExplorer
 class DocumentDetails(QWidget):
     add_to_filter = pyqtSignal(int)
     filter_by_only = pyqtSignal(int)
+    open_document_signal = pyqtSignal(int)
 
     def __init__(self):
         super().__init__()
+
+        self.doc_id = None
 
         layout = QVBoxLayout()
 
@@ -42,6 +45,11 @@ class DocumentDetails(QWidget):
         self.keyword_bar.add_to_filter.connect(self.add_to_filter.emit)
         self.keyword_bar.filter_by_only.connect(self.filter_by_only.emit)
         layout.addWidget(self.keyword_bar)
+
+        # Button to open in os viewer
+        self.open_file_button = QPushButton("Open file")
+        self.open_file_button.clicked.connect(self.emit_open_doc_signal)
+        layout.addWidget(self.open_file_button)
 
         # Button to add keyword
         self.add_keyword_button = QPushButton('Add keyword')
@@ -74,7 +82,8 @@ class DocumentDetails(QWidget):
         else:
             self.setStyleSheet("QWidget { background-color: #D3D3D3 }")  # Greyed out when disabled
 
-    def update_data(self, document_info, key_id_list):
+    def update_data(self, doc_id, document_info, key_id_list):
+        self.doc_id = doc_id
         title = document_info['title']
         doi = document_info['doi']
         author = document_info['author']
@@ -90,3 +99,7 @@ class DocumentDetails(QWidget):
     @staticmethod
     def get_string(value):
         return "-" if value is None else value
+
+    def emit_open_doc_signal(self):
+        if self.doc_id is not None:
+            self.open_document_signal.emit(self.doc_id)
